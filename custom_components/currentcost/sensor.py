@@ -180,6 +180,7 @@ class CurrentCostSensor(SensorEntity, RestoreEntity):
                 total_watts = watsch1 + watsch2 + watsch3
 
                 if appliance == 0:
+                    self._state = total_watts
                     self._attributes["Channel 1"] = watsch1
                     self._attributes["Channel 2"] = watsch2
                     self._attributes["Channel 3"] = watsch3
@@ -193,14 +194,6 @@ class CurrentCostSensor(SensorEntity, RestoreEntity):
 
                 if temperature is not None:
                     self._attributes["Temperature"] = temperature
-
-                # Update running instance totals
-                if appliance == 1:
-                    self._appliance1_total = total_watts
-                elif appliance == 2:
-                    self._appliance2_total = total_watts
-
-                self._state = self._appliance1_total + self._appliance2_total
 
                 # History extraction
                 hist_data = msg.get("hist", {}).get("data", [])
